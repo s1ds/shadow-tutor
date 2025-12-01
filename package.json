@@ -19,7 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@utcp/code-mode": "^0.1.0"
+    "@utcp/code-mode": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -10,28 +10,23 @@ async function main() {
     const client = await CodeModeUtcpClient.create();
     console.log('✓ UTCP client initialized');
 
-    // 2. Register MCP tools (example: github integration)
-    console.log('Registering MCP tools...');
-    await client.registerManual({
-      name: 'github',
-      // Add your MCP configuration here
-      // Example:
-      // command: 'npx',
-      // args: ['-y', '@modelcontextprotocol/server-github'],
-      // env: {
-      //   GITHUB_TOKEN: process.env.GITHUB_TOKEN
-      // }
-    });
-    console.log('✓ MCP tools registered');
-
-    // 3. Execute TypeScript code via tool chain
+    // 2. Execute TypeScript code via tool chain
     console.log('Executing tool chain...');
-    const { result } = await client.callToolChain(`
+    const { result, logs } = await client.callToolChain(`
       // Your TypeScript code here
-      console.log('Hello from Shadow Tutor!');
+      const greeting = 'Hello from Shadow Tutor!';
+      console.log(greeting);
+
+      // You can do calculations
+      const sum = [1, 2, 3, 4, 5].reduce((a, b) => a + b, 0);
+      console.log('Sum of 1-5:', sum);
+
+      // Return a value
+      return { greeting, sum };
     `);
     console.log('✓ Tool chain executed successfully');
     console.log('Result:', result);
+    console.log('Captured logs:', logs);
 
   } catch (error) {
     console.error('Error running UTCP client:', error);

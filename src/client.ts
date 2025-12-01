@@ -1,12 +1,16 @@
 import { CodeModeUtcpClient } from '@utcp/code-mode';
 
+export interface McpServerConfig {
+  name: string;
+  call_template_type: 'mcp';
+  command?: string;
+  args?: string[];
+  env?: Record<string, string>;
+  [key: string]: any;
+}
+
 export interface UtcpClientConfig {
-  mcpServers?: Array<{
-    name: string;
-    command?: string;
-    args?: string[];
-    env?: Record<string, string>;
-  }>;
+  mcpServers?: McpServerConfig[];
 }
 
 /**
@@ -43,13 +47,12 @@ export class ShadowTutorClient {
   /**
    * Execute TypeScript code via the tool chain
    */
-  async executeCode(code: string): Promise<unknown> {
+  async executeCode(code: string): Promise<{ result: any; logs: string[] }> {
     if (!this.client) {
       throw new Error('Client not initialized. Call initialize() first.');
     }
 
-    const { result } = await this.client.callToolChain(code);
-    return result;
+    return await this.client.callToolChain(code);
   }
 
   /**

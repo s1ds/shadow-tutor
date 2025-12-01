@@ -7,13 +7,14 @@ export async function basicExample() {
   const client = new ShadowTutorClient();
   await client.initialize();
 
-  const result = await client.executeCode(`
+  const { result, logs } = await client.executeCode(`
     const greeting = 'Hello from Shadow Tutor!';
     console.log(greeting);
     return greeting;
   `);
 
   console.log('Result:', result);
+  console.log('Logs:', logs);
 }
 
 /**
@@ -24,6 +25,7 @@ export async function githubExample() {
     mcpServers: [
       {
         name: 'github',
+        call_template_type: 'mcp',
         command: 'npx',
         args: ['-y', '@modelcontextprotocol/server-github'],
         env: {
@@ -36,12 +38,14 @@ export async function githubExample() {
   await client.initialize();
 
   // Execute code that can use GitHub MCP tools
-  const result = await client.executeCode(`
+  const { result, logs } = await client.executeCode(`
     // Your TypeScript code that interacts with GitHub
     console.log('GitHub MCP tools are available');
+    return { status: 'ready' };
   `);
 
   console.log('Result:', result);
+  console.log('Logs:', logs);
 }
 
 /**
@@ -52,6 +56,7 @@ export async function multipleServersExample() {
     mcpServers: [
       {
         name: 'github',
+        call_template_type: 'mcp',
         command: 'npx',
         args: ['-y', '@modelcontextprotocol/server-github'],
         env: {
@@ -60,19 +65,24 @@ export async function multipleServersExample() {
       },
       {
         name: 'filesystem',
+        call_template_type: 'mcp',
         // Add your filesystem server configuration
+        // command: 'npx',
+        // args: ['-y', '@modelcontextprotocol/server-filesystem']
       },
     ],
   });
 
   await client.initialize();
 
-  const result = await client.executeCode(`
+  const { result, logs } = await client.executeCode(`
     // Code with access to multiple MCP servers
     console.log('Multiple MCP servers available');
+    return { servers: ['github', 'filesystem'] };
   `);
 
   console.log('Result:', result);
+  console.log('Logs:', logs);
 }
 
 // Run examples if this file is executed directly
